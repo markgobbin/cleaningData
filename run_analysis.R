@@ -9,6 +9,14 @@ testX <- read.table("test/X_test.txt",header=FALSE,strip.white=TRUE)
 trainy <- read.table("train/y_train.txt",header=FALSE)
 testy <- read.table("test/y_test.txt",header=FALSE)
 
+#Read in labels signifying subject numbers
+
+subtrain <- read.table("train/subject_train.txt",header=FALSE)
+subtest <- read.table("test/subject_test.txt",header=FALSE)
+#Apply column names to subject
+colnames(subtrain) <- "Subject"
+colnames(subtest) <- "Subject"
+
 #Read in labels corresponding to activity numbers
 ynums <- read.table("activity_labels.txt",header=FALSE)
 
@@ -16,7 +24,6 @@ ynums <- read.table("activity_labels.txt",header=FALSE)
 # Because y_train.txt and y_test.txt includes numbers in column 1, we use the second column (name) only
 trainynames <- data.frame(ynums[trainy[,1],2])
 testynames <- data.frame(ynums[testy[,1],2])
-
 #Apply column name to activity
 colnames(trainynames) <- "Activity"
 colnames(testynames) <- "Activity"
@@ -26,8 +33,16 @@ colnames(trainX) <- as.vector(headings[,2])
 colnames(testX) <- as.vector(headings[,2])
 
 #bind activity names to the tables
-train.act <- cbind(trainynames,trainX)
-test.act <- cbind(testynames,testX)
+trainX <- cbind(trainynames,trainX)
+testX <- cbind(testynames,testX)
+
+#bind subjects to the tables
+trainX <- cbind(subtrain,trainX)
+testX <- cbind(subtest,testX)
 
 #finally, bind rows together
-result <- rbind(train.act,test.act)
+result <- rbind(trainX,testX)
+
+#extract mean and std columns
+result <- result[grepl("mean\\(\\)",names(result))|grepl("std\\(\\)",names(result))]
+
