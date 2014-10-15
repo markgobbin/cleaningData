@@ -1,3 +1,6 @@
+#If reshape2 does not load, type install.library("reshape2")
+library(reshape2)
+
 #Read in data headings
 headings<-read.table("features.txt",header=FALSE,sep=" ")
 
@@ -33,8 +36,11 @@ colnames(trainX) <- as.vector(headings[,2])
 colnames(testX) <- as.vector(headings[,2])
 
 #extract mean and std columns
-result <- result[grepl("mean\\(\\)",names(result))|grepl("std\\(\\)",names(result))]
-#### This is done now before we bind activity and subject columns
+#### This is done now before we bind activity and subject columns, or they'll disappear 
+#We could keep activity and subject columns through other means but I chose to extract now
+trainX <- trainX[grepl("mean\\(\\)",names(trainX))|grepl("std\\(\\)",names(trainX))]
+testX <- testX[grepl("mean\\(\\)",names(testX))|grepl("std\\(\\)",names(testX))]
+
 
 #bind activity names to the tables
 trainX <- cbind(trainynames,trainX)
@@ -46,6 +52,14 @@ testX <- cbind(subtest,testX)
 
 #finally, bind rows together
 result <- rbind(trainX,testX)
+
+#### Now we have to take the mean by subject and activity ####
+library(reshape2)
+melt(result,id.vars=c("Subject","Activity"),variable.name="Feature") -> reshaped
+dcast(reshaped,Subject+Activity~Feature,mean) -> reshaped
+
+## Write out the result ##
+write.table(reshaped,"result.txt",row.names=FALSE)
 
 
 
