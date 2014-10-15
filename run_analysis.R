@@ -32,6 +32,10 @@ colnames(testynames) <- "Activity"
 colnames(trainX) <- as.vector(headings[,2])
 colnames(testX) <- as.vector(headings[,2])
 
+#extract mean and std columns
+result <- result[grepl("mean\\(\\)",names(result))|grepl("std\\(\\)",names(result))]
+#### This is done now before we bind activity and subject columns
+
 #bind activity names to the tables
 trainX <- cbind(trainynames,trainX)
 testX <- cbind(testynames,testX)
@@ -43,6 +47,5 @@ testX <- cbind(subtest,testX)
 #finally, bind rows together
 result <- rbind(trainX,testX)
 
-#extract mean and std columns
-result <- result[grepl("mean\\(\\)",names(result))|grepl("std\\(\\)",names(result))]
+
 
