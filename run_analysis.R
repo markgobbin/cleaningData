@@ -59,7 +59,7 @@ melt(result,id.vars=c("Subject","Activity"),variable.name="Feature") -> reshaped
 dcast(reshaped,Subject+Activity~Feature,mean) -> reshaped
 
 ## Write out the result ##
-write.table(reshaped,"result.txt",row.names=FALSE)
+write.table(reshaped,"meansBySubjectActivity.txt",row.names=FALSE)
 
 
 
