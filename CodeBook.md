@@ -1,4 +1,5 @@
 #Code book
+
 This data set contains measurements of accelerometer and gyroscope 3-axial raw signals
 
 The first two columns in my tidy data set are "Subject" and "Activity". The subject is a participant in the study numbered 1 to 30. The activity is a label specifying whether someone was walking, standing, sitting, etc.
